@@ -1,39 +1,30 @@
-import Link from "next/link"
+import { TodoForm } from "@/components/todos/todo-form"
+import TodoList from "@/components/todos/todo-list"
+import { getTodos } from "@/lib/todo"
 
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
+export default async function IndexPage() {
+  const { todos } = await getTodos()
 
-export default function IndexPage() {
+  console.log('todos', todos)
+
   return (
     <section className="container grid items-center gap-6 pb-8 pt-6 md:py-10">
       <div className="flex max-w-[980px] flex-col items-start gap-2">
         <h1 className="text-3xl font-extrabold leading-tight tracking-tighter md:text-4xl">
-          Beautifully designed components <br className="hidden sm:inline" />
-          built with Radix UI and Tailwind CSS.
+          Beautifully Todo App.
         </h1>
         <p className="max-w-[700px] text-lg text-muted-foreground">
-          Accessible and customizable components that you can copy and paste
-          into your apps. Free. Open Source. And Next.js 13 Ready.
+          Create your Todo list.
         </p>
       </div>
-      <div className="flex gap-4">
-        <Link
-          href={siteConfig.links.docs}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants()}
-        >
-          Documentation
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.github}
-          className={buttonVariants({ variant: "outline" })}
-        >
-          GitHub
-        </Link>
-      </div>
+      <TodoForm />
+      <ul className="flex h-full w-full flex-col overflow-hidden bg-popover text-popover-foreground rounded-lg border shadow-md">
+        {
+          todos?.map((todo) => (
+            <TodoList key={todo?.id} todo={todo} />        
+          ))
+        }
+      </ul>
     </section>
   )
 }
