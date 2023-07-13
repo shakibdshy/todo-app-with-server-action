@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
-import { toast } from "../ui/use-toast"
+import { useToast } from "@/components/ui/use-toast"
 import { createTodoAction } from "@/app/_action"
 
 const todoFormSchema = z.object({
@@ -28,6 +28,7 @@ const defaultValues: Partial<TodoFormValues> = {
 }
 
 export function TodoForm() {
+  const { toast } = useToast()
   const form = useForm<TodoFormValues>({
     resolver: zodResolver(todoFormSchema),
     defaultValues
@@ -40,12 +41,7 @@ export function TodoForm() {
     await createTodoAction(title)
 
     toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
+      title: "Your todo has been created.",
     })
 
     form.reset()
